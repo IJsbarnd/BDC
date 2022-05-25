@@ -219,6 +219,8 @@ if __name__ == '__main__':
                            required=False, help="CSV file to save the output.")
     server_args.add_argument("fastq_files", action="store",
                            nargs='+', help="At least 1 ILLUMINA fastq file to process")
+    server_args.add_argument("--chunks", default=4, action="store", type=int,
+                             help="Aantal chunks of de fastq file(s) in op te splitsen.")
     # Client arguments
     client_args = argparser.add_argument_group(title="Arguments when run in client mode")
     argparser.add_argument("-n", action="store",
@@ -229,43 +231,20 @@ if __name__ == '__main__':
 
     args = argparser.parse_args()
 
-    qualities = read_fastq(args.fastq_files[0])
-    qual_chunked = chunks(qualities, 4)
-
-    if len(args.fastq_files) > 1:
+    for file in args.fastq_files:
         if args.CSVfile is None:
             sys.stdout.write(file + "\n")
             CSV = None
         else:
-            CSV = f'{file}.{args.CSVfile}'
-    else:
-        CSV = args.CSVfile
+            out_file = file.split('/')[-1]
+            CSV = f'{out_file}.{args.CSVfile}'
+        qualities = read_fastq(file)
+        qual_chunked = chunks(qualities, args.chunks)
 
-    server = mp.Process(target=runserver, args=(calculate_quals, qual_chunked, len(qualities), CSV))
-    server.start()
-    time.sleep(1)
-    client = mp.Process(target=runclient, args=(4,))
-    client.start()
-    server.join()
-    client.join()
-
-
-    #for file in args.fastq_files:
-    #    qualities = read_fastq(file)
-    #    qual_chunked = chunks(qualities, 4)
-#
-    #    with mp.Pool(args.n) as pool:
-    #        phredscores = pool.map(calculate_quals, qual_chunked)
-#
-    #    phredscores_avg = [sum(i) / len(qualities) for i in zip(*phredscores)]
-#
-    #    if len(args.fastq_files) > 1:
-    #        if args.CSVfile is None:
-    #            sys.stdout.write(file + "\n")
-    #            CSV = None
-    #        else:
-    #            CSV = f'{file}.{args.CSVfile}'
-    #    else:
-    #        CSV = args.CSVfile
-#
-    #    generate_output(phredscores_avg, CSV)
+        server = mp.Process(target=runserver, args=(calculate_quals, qual_chunked, len(qualities), CSV))
+        server.start()
+        time.sleep(1)
+        client = mp.Process(target=runclient, args=(4,))
+        client.start()
+        server.join()
+        client.join()
