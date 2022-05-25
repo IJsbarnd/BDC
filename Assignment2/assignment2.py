@@ -208,7 +208,7 @@ def peon(job_q, result_q):
 
 if __name__ == '__main__':
     # argparse
-    argparser = ap.ArgumentParser(description="Script for assignment 1 of Big Data Computing")
+    argparser = ap.ArgumentParser(description="Script for assignment 2 of Big Data Computing")
     # Mode arguments
     mode = argparser.add_mutually_exclusive_group(required=True)
     mode.add_argument("-s", action="store_true", help="Run the program in Server mode; see extra options needed below")
