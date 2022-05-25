@@ -1,0 +1,10 @@
+ ************* Module assignment1
+ assignment1.py:12: convention (C0413, wrong-import-position, ) Import "import argparse as ap" should be placed at the top of the module
+ assignment1.py:13: convention (C0413, wrong-import-position, ) Import "import multiprocessing as mp" should be placed at the top of the module
+ assignment1.py:14: convention (C0413, wrong-import-position, ) Import "import csv" should be placed at the top of the module
+ assignment1.py:15: convention (C0413, wrong-import-position, ) Import "import sys" should be placed at the top of the module
+ 
+ ------------------------------------------------------------------
+ Your code has been rated at 9.38/10 (previous run: 9.36/10, +0.01)
+ 
+ 
