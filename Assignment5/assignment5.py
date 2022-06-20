@@ -2,8 +2,8 @@
 
 """ Assignment 5"""
 
-__author__ = "Lisan Eisinga"
-__version__ = "3.2"
+__author__ = "IJsbrand Pool"
+__version__ = "2.0"
 
 import os
 import sys

@@ -5,8 +5,8 @@ assignment4.py
 """
 
 # Metadata.
-__author__ = "Lisan Eisinga"
-__version__ = 1.03
+__author__ = "IJsbrand Pool"
+__version__ = 3.0
 
 # Imports.
 import argparse as ap
