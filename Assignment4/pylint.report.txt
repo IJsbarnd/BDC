@@ -1,0 +1,8 @@
+************* Module assignment4
+assignment4.py:78:0: C0304: Final newline missing (missing-final-newline)
+assignment4.py:27:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+assignment4.py:55:29: C0207: Use str(fastq[0]).rsplit('/', maxsplit=1)[-1] instead (use-maxsplit-arg)
+
+------------------------------------------------------------------
+Your code has been rated at 9.30/10 (previous run: 8.94/10, +0.37)
+
