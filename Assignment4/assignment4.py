@@ -6,73 +6,61 @@ assignment4.py
 
 # Metadata.
 __author__ = "IJsbrand Pool"
-__version__ = 3.0
+__version__ = 4.0
 
-# Imports.
-import argparse as ap
 import sys
-from statistics import mean
+import csv
 
 
-# Functions.
-def fastq_control_centre(fastq):
-    """ Controls the Fastq files. """
+def fastq_reader(fastqfile):
+    """ Reads file and calculated the score. """
 
-    complete = True
-    quals = ""
-    start = ""
-    count_l = 0
-    len_line = []
+    with open(fastqfile, 'r') as fastq:
+        complete = True
+        counter = 0
+        length_min = 1e99
+        length_max = 0
+        length_average = [0, 0]
+        while True:
+            header = fastq.readline().rstrip()
+            nucleotides = fastq.readline().rstrip()
+            seperator = fastq.readline().rstrip()
+            qual = fastq.readline().rstrip()
 
-    with open(fastq[0], "r") as myfile:
-        for item, line in enumerate(myfile):
-            count_l += 1
-            count = item - 1
-            if not count % 4:
-                start = len(line.strip())
-                len_line.append(start)
-
-            count = item + 1
-            if not count % 4:
-                quals = len(line.strip())
-                len_line.append(quals)
-
-            if quals and start:
-                if start != quals:
-                    complete = False
+            if len(header) == 0:
                 break
-
-            if count_l % 4:
-                complete = False
+            if len(nucleotides) == 0:
+                counter += 1
+                break
+            if len(seperator) == 0:
+                counter += 2
+                break
+            if len(qual) == 0:
+                counter += 3
+                break
             else:
-                pass
+                counter += 4
 
-    maxed_lines = str(max(len_line))
-    min_lines = str(min(len_line))
+            if complete:
+                if len(qual) != len(nucleotides):
+                    complete = False
+                if not header.startswith('@'):
+                    complete = False
 
-    line_length_mean = str(round(mean(len_line), 2))
+            if len(nucleotides) < length_min:
+                length_min = len(nucleotides)
+            if len(nucleotides) > length_max:
+                length_max = len(nucleotides)
+            length_average[0] += len(nucleotides)
+            length_average[1] += 1
 
-    files = sys.stdout.write(str(fastq[0]).split("/")[-1])
-    sys.stdout.write(str(files) + "," + str(complete) + "," + min_lines +
-                     "," + maxed_lines + "," + line_length_mean + "\n")
-
-
-def argument_parser():
-    """ Arg-parser for commandline. """
-
-    myargs = ap.ArgumentParser(description="Script voor Opdracht 4 van Big Data Computing.")
-    myargs.add_argument("fastq", action="store", type=str, nargs='*',
-                        help="Minstens 1 Illumina Fastq Format file om te verwerken")
-
-    args = myargs.parse_args()
-    main(args)
-
-
-# Executes.
-def main(args):
-    """ Main function, runs entire script. """
-    fastq_control_centre(args.fastq)
+        file = fastqfile.split('/')[-1]
+        return {'file': file, 'complete': complete, 'length_min': length_min,
+                'length_max': length_max, 'length_average': length_average[0] / length_average[1]}
 
 
 if __name__ == '__main__':
-    argument_parser()
+    result = fastq_reader(sys.argv[1])
+    csv.writer(sys.stdout, delimiter=',').writerow(
+        [result['file'], result['complete'], result['length_min'],
+         result['length_max'], result['length_average']])
