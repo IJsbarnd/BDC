@@ -1,4 +1,2 @@
-Report for Assignment 4 start evaluation at ma 27 jun 2022 13:14:02 CEST with options: None
-ERROR: For file "/data/dataprocessing/rnaseq_data/Brazil_Brain/SPM11_R1.fastq " in col 2 you report "False": should be "True"
-EXITING
-***ASSIGNMENT {assignment} STATUS: FAILED at  ma 27 jun 2022 13:14:05 CEST
+Report for Assignment 4 start evaluation at di 5 jul 2022 11:51:04 CEST with options: None
+***ASSIGNMENT {assignment} STATUS: PASSED at  di 5 jul 2022 11:52:40 CEST
